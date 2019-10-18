@@ -1,5 +1,7 @@
 # Lingver
 
+[![](https://jitpack.io/v/YarikSOffice/lingver.svg)](https://jitpack.io/#YarikSOffice/lingver)
+
 Lingver is a library to manage your application locale and language.
  
 Once you set a desired locale, Lingver will enforce your application to provide correctly localized data via Resources class.
@@ -27,15 +29,13 @@ Note that you need to update all already fetched locale-based data manually. Lin
 
 ## Download
 
-``` gradle
+``` groovy
 repositories {
 	maven { url 'https://jitpack.io' }
 }
 
 dependencies {
-
-  implementation "com.github.YarikSOffice:lingver:1.0.0"
-
+	implementation "com.github.YarikSOffice:lingver:1.0.0"
 }
 ```
 

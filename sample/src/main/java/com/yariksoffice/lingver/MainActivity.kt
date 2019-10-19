@@ -29,11 +29,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.TextView
-
-import java.text.SimpleDateFormat
-import java.util.Date
-
 import androidx.appcompat.app.AppCompatActivity
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -54,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         val tv = findViewById<TextView>(R.id.hello)
         val date = SimpleDateFormat.getDateInstance().format(Date())
         tv.text = getString(R.string.hello, date)
-        Log.d(TAG, "Language: " + Lingver.getInstance().getLocale())
+        Log.d(TAG, "Language: " + Lingver.getInstance().getLanguage())
     }
 
     companion object {

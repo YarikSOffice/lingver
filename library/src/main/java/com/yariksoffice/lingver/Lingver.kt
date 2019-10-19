@@ -24,6 +24,7 @@
 
 package com.yariksoffice.lingver
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
 import android.content.Context
@@ -33,6 +34,7 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
 import android.os.Build.VERSION_CODES
+import android.os.LocaleList
 import com.yariksoffice.lingver.store.LocaleStore
 import com.yariksoffice.lingver.store.PreferenceLocaleStore
 import java.util.*
@@ -46,22 +48,51 @@ import java.util.*
 class Lingver private constructor(private val store: LocaleStore) {
 
     /**
-     * Sets the locale which will be used to localize all data coming from [Resources] class.
+     * Creates and sets a [Locale] using language, country and variant information.
+     *
+     * See the [Locale] class description for more information about valid language, country
+     * and variant values.
+     */
+    fun setLocale(context: Context, language: String, country: String = "", variant: String = "") {
+        setLocale(context, Locale(language, country, variant))
+    }
+
+    /**
+     * Sets a [locale] which will be used to localize all data coming from [Resources] class.
      *
      * <p>Note that you need to update all already fetched locale-based data manually.
      * [Lingver] is not responsible for that.
-     *
-     * <p>The language value is a two or three-letter language code as defined in ISO639.
-     * See the [Locale] class description for more information
-     * about valid language values.
      */
-    fun setLocale(context: Context, language: String) {
-        store.persistLocale(language)
-        update(context, language)
+    fun setLocale(context: Context, locale: Locale) {
+        store.persistLocale(locale)
+        update(context, locale)
     }
 
-    fun getLocale(): String {
-        return store.getLocal()
+    /**
+     * Returns the active [Locale].
+     */
+    fun getLocale(): Locale {
+        return store.getLocale()
+    }
+
+    /**
+     * Returns a language code which is a part of the active [Locale].
+     *
+     * Deprecated ISO language codes "iw", "ji", and "in" are converted
+     * to "he", "yi", and "id", respectively.
+     */
+    fun getLanguage(): String {
+        return verifyLanguage(getLocale().language)
+    }
+
+    private fun verifyLanguage(language: String): String {
+        // get rid of deprecated language tags
+        return when (language) {
+            "iw" -> "he"
+            "ji" -> "yi"
+            "in" -> "id"
+            else -> language
+        }
     }
 
     private fun setUp(application: Application) {
@@ -70,32 +101,46 @@ class Lingver private constructor(private val store: LocaleStore) {
     }
 
     internal fun setLocaleInternal(context: Context) {
-        update(context, store.getLocal())
+        update(context, store.getLocale())
     }
 
-    private fun update(context: Context, language: String) {
-        updateResources(context, language)
+    private fun update(context: Context, locale: Locale) {
+        updateResources(context, locale)
         val appContext = context.applicationContext
         if (appContext !== context) {
-            updateResources(appContext, language)
+            updateResources(appContext, locale)
         }
     }
 
     @Suppress("DEPRECATION")
-    private fun updateResources(context: Context, language: String) {
-        val locale = Locale(language)
+    private fun updateResources(context: Context, locale: Locale) {
         Locale.setDefault(locale)
 
         val res = context.resources
-        if (alreadyDesiredLocale(language, res)) return
+        val current = res.configuration.getLocaleCompat()
+
+        if (current == locale) return
 
         val config = Configuration(res.configuration)
-        if (isAtLeastSdkVersion(VERSION_CODES.JELLY_BEAN_MR1)) {
-            config.setLocale(locale)
-        } else {
-            config.locale = locale
+        when {
+            isAtLeastSdkVersion(VERSION_CODES.N) -> setLocaleForApi24(config, locale)
+            isAtLeastSdkVersion(VERSION_CODES.JELLY_BEAN_MR1) -> config.setLocale(locale)
+            else -> config.locale = locale
         }
         res.updateConfiguration(config, res.displayMetrics)
+    }
+
+    @SuppressLint("NewApi")
+    private fun setLocaleForApi24(config: Configuration, locale: Locale) {
+        // bring the target locale to the front of the list
+        val set = linkedSetOf(locale)
+
+        val defaultLocales = LocaleList.getDefault()
+        val all = List<Locale>(defaultLocales.size()) { defaultLocales[it] }
+        // append other locales supported by the user
+        set.addAll(all)
+
+        config.setLocales(LocaleList(*all.toTypedArray()))
     }
 
     internal fun resetActivityTitle(activity: Activity) {
@@ -108,13 +153,6 @@ class Lingver private constructor(private val store: LocaleStore) {
         } catch (e: NameNotFoundException) {
             e.printStackTrace()
         }
-    }
-
-    private fun alreadyDesiredLocale(language: String, res: Resources): Boolean {
-        // https://docs.oracle.com/javase/8/docs/api/java/util/Locale.html#getLanguage--
-        val desired = Locale(language).language
-        val current = res.configuration.getLocaleCompat().language
-        return current.equals(desired, ignoreCase = true)
     }
 
     @Suppress("DEPRECATION")
@@ -141,9 +179,12 @@ class Lingver private constructor(private val store: LocaleStore) {
             return instance
         }
 
+        /**
+         * Creates and sets up the global instance using default parameters.
+         */
         @JvmStatic
-        fun init(application: Application, defaultLanguage: String): Lingver {
-            return init(application, PreferenceLocaleStore(application, defaultLanguage))
+        fun init(application: Application, defaultLocale: Locale = Locale.getDefault()): Lingver {
+            return init(application, PreferenceLocaleStore(application, defaultLocale))
         }
 
         /**
@@ -156,7 +197,7 @@ class Lingver private constructor(private val store: LocaleStore) {
             check(!::instance.isInitialized) { "Already initialized" }
             val lingver = Lingver(store)
             lingver.setUp(application)
-            lingver.setLocaleInternal(application)
+            lingver.setLocale(application, store.getLocale())
             instance = lingver
             return lingver
         }

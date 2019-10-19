@@ -25,11 +25,12 @@
 package com.yariksoffice.lingver.store
 
 import com.yariksoffice.lingver.Lingver
+import java.util.*
 
 /**
- *  Interface to be used by [Lingver] to store a locale tag.
+ *  Interface to be used by [Lingver] for storing a Locale.
  */
 interface LocaleStore {
-    fun getLocal(): String
-    fun persistLocale(language: String)
+    fun getLocale(): Locale
+    fun persistLocale(locale: Locale)
 }

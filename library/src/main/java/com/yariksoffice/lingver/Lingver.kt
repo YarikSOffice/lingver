@@ -53,6 +53,7 @@ class Lingver private constructor(private val store: LocaleStore) {
      * See the [Locale] class description for more information about valid language, country
      * and variant values.
      */
+    @JvmOverloads
     fun setLocale(context: Context, language: String, country: String = "", variant: String = "") {
         setLocale(context, Locale(language, country, variant))
     }
@@ -180,9 +181,18 @@ class Lingver private constructor(private val store: LocaleStore) {
         }
 
         /**
-         * Creates and sets up the global instance using default parameters.
+         * Creates and sets up the global instance using a provided language and the default store.
          */
         @JvmStatic
+        fun init(application: Application, defaultLanguage: String): Lingver {
+            return init(application, Locale(defaultLanguage))
+        }
+
+        /**
+         * Creates and sets up the global instance using a provided locale and the default store.
+         */
+        @JvmStatic
+        @JvmOverloads
         fun init(application: Application, defaultLocale: Locale = Locale.getDefault()): Lingver {
             return init(application, PreferenceLocaleStore(application, defaultLocale))
         }

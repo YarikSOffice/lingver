@@ -32,9 +32,12 @@ import java.util.*
 /**
  * Default implementation of [LocaleStore] using [SharedPreferences].
  */
-class PreferenceLocaleStore(context: Context, private val defaultLocale: Locale) : LocaleStore {
+class PreferenceLocaleStore @JvmOverloads constructor(
+        context: Context,
+        private val defaultLocale: Locale = Locale.getDefault(),
+        preferenceName: String = DEFAULT_PREFERENCE_NAME) : LocaleStore {
 
-    private val prefs = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
+    private val prefs = context.getSharedPreferences(preferenceName, Context.MODE_PRIVATE)
 
     override fun getLocale(): Locale {
         // there is no predefined way to serialize/deserialize Locale object
@@ -60,7 +63,7 @@ class PreferenceLocaleStore(context: Context, private val defaultLocale: Locale)
 
     companion object {
         private const val LANGUAGE_KEY = "language_key"
-        private const val PREFERENCE_NAME = "lingver_preference"
+        private const val DEFAULT_PREFERENCE_NAME = "lingver_preference"
         private const val LANGUAGE_JSON_KEY = "language"
         private const val COUNTRY_JSON_KEY = "country"
         private const val VARIANT_JSON_KEY = "variant"

@@ -26,7 +26,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 def versionMajor = 1
-def versionMinor = 1
+def versionMinor = 2
 def versionPatch = 0
 
 android {
@@ -35,7 +35,7 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 29
-        versionCode 2
+        versionCode 3
         versionName versionMajor + "." + versionMinor + "." + versionPatch
     }
     // TODO replace with https://issuetracker.google.com/issues/72050365 once released.

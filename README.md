@@ -35,7 +35,7 @@ repositories {
 }
 
 dependencies {
-	implementation "com.github.YarikSOffice:lingver:1.1.0"
+	implementation "com.github.YarikSOffice:lingver:1.2.0"
 }
 ```
 

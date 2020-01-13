@@ -30,8 +30,11 @@ import android.view.View
 import android.widget.Toast
 
 import com.yariksoffice.lingver.App.Companion.LANGUAGE_ENGLISH
+import com.yariksoffice.lingver.App.Companion.LANGUAGE_ENGLISH_COUNTRY
 import com.yariksoffice.lingver.App.Companion.LANGUAGE_RUSSIAN
+import com.yariksoffice.lingver.App.Companion.LANGUAGE_RUSSIAN_COUNTRY
 import com.yariksoffice.lingver.App.Companion.LANGUAGE_UKRAINIAN
+import com.yariksoffice.lingver.App.Companion.LANGUAGE_UKRAINIAN_COUNTRY
 
 class SettingsActivity : BaseActivity() {
 
@@ -39,13 +42,13 @@ class SettingsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings_activity)
 
-        findViewById<View>(R.id.en).setOnClickListener { setNewLocale(LANGUAGE_ENGLISH) }
-        findViewById<View>(R.id.ua).setOnClickListener { setNewLocale(LANGUAGE_UKRAINIAN) }
-        findViewById<View>(R.id.ru).setOnClickListener { setNewLocale(LANGUAGE_RUSSIAN) }
+        findViewById<View>(R.id.en).setOnClickListener { setNewLocale(LANGUAGE_ENGLISH, LANGUAGE_ENGLISH_COUNTRY) }
+        findViewById<View>(R.id.ua).setOnClickListener { setNewLocale(LANGUAGE_UKRAINIAN, LANGUAGE_UKRAINIAN_COUNTRY) }
+        findViewById<View>(R.id.ru).setOnClickListener { setNewLocale(LANGUAGE_RUSSIAN, LANGUAGE_RUSSIAN_COUNTRY) }
     }
 
-    private fun setNewLocale(language: String) {
-        Lingver.getInstance().setLocale(this, language)
+    private fun setNewLocale(language: String, country: String) {
+        Lingver.getInstance().setLocale(this, language, country)
 
         val i = Intent(this, MainActivity::class.java)
         startActivity(i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))

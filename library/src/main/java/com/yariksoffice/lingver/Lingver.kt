@@ -141,7 +141,7 @@ class Lingver private constructor(private val store: LocaleStore) {
         // append other locales supported by the user
         set.addAll(all)
 
-        config.setLocales(LocaleList(*all.toTypedArray()))
+        config.setLocales(LocaleList(*set.toTypedArray()))
     }
 
     internal fun resetActivityTitle(activity: Activity) {

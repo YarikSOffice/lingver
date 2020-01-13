@@ -27,9 +27,9 @@ package com.yariksoffice.lingver
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.main_activity.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -39,19 +39,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
 
-        findViewById<View>(R.id.activity_1).setOnClickListener {
+        activity_1.setOnClickListener {
             startActivity(Intent(this, TestActivity1::class.java))
         }
-        findViewById<View>(R.id.activity_2).setOnClickListener {
+        activity_2.setOnClickListener {
             startActivity(Intent(this, TestActivity2::class.java))
         }
-        findViewById<View>(R.id.settings).setOnClickListener {
+        settings.setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
 
-        val tv = findViewById<TextView>(R.id.hello)
         val date = SimpleDateFormat.getDateInstance().format(Date())
-        tv.text = getString(R.string.hello, date)
+        hello.text = getString(R.string.hello, date)
         Log.d(TAG, "Language: " + Lingver.getInstance().getLanguage())
     }
 

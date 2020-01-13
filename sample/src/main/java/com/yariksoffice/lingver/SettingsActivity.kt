@@ -26,15 +26,14 @@ package com.yariksoffice.lingver
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
-
 import com.yariksoffice.lingver.App.Companion.LANGUAGE_ENGLISH
 import com.yariksoffice.lingver.App.Companion.LANGUAGE_ENGLISH_COUNTRY
 import com.yariksoffice.lingver.App.Companion.LANGUAGE_RUSSIAN
 import com.yariksoffice.lingver.App.Companion.LANGUAGE_RUSSIAN_COUNTRY
 import com.yariksoffice.lingver.App.Companion.LANGUAGE_UKRAINIAN
 import com.yariksoffice.lingver.App.Companion.LANGUAGE_UKRAINIAN_COUNTRY
+import kotlinx.android.synthetic.main.settings_activity.*
 
 class SettingsActivity : BaseActivity() {
 
@@ -42,9 +41,9 @@ class SettingsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings_activity)
 
-        findViewById<View>(R.id.en).setOnClickListener { setNewLocale(LANGUAGE_ENGLISH, LANGUAGE_ENGLISH_COUNTRY) }
-        findViewById<View>(R.id.ua).setOnClickListener { setNewLocale(LANGUAGE_UKRAINIAN, LANGUAGE_UKRAINIAN_COUNTRY) }
-        findViewById<View>(R.id.ru).setOnClickListener { setNewLocale(LANGUAGE_RUSSIAN, LANGUAGE_RUSSIAN_COUNTRY) }
+        en.setOnClickListener { setNewLocale(LANGUAGE_ENGLISH, LANGUAGE_ENGLISH_COUNTRY) }
+        ua.setOnClickListener { setNewLocale(LANGUAGE_UKRAINIAN, LANGUAGE_UKRAINIAN_COUNTRY) }
+        ru.setOnClickListener { setNewLocale(LANGUAGE_RUSSIAN, LANGUAGE_RUSSIAN_COUNTRY) }
     }
 
     private fun setNewLocale(language: String, country: String) {

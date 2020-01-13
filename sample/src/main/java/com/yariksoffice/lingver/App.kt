@@ -40,7 +40,10 @@ class App : Application() {
 
     companion object {
         const val LANGUAGE_ENGLISH = "en"
+        const val LANGUAGE_ENGLISH_COUNTRY = "US"
         const val LANGUAGE_UKRAINIAN = "uk"
+        const val LANGUAGE_UKRAINIAN_COUNTRY = "UA"
         const val LANGUAGE_RUSSIAN = "ru"
+        const val LANGUAGE_RUSSIAN_COUNTRY = "RU"
     }
 }

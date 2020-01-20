@@ -31,6 +31,7 @@
     <string name="activity_2_text">Довільний текст 2</string>
 
     <string name="settings_label">Налаштування</string>
+    <string name="web_view_label">Браузер</string>
 
     <string name="ukrainian">Українська</string>
     <string name="english">Англійська</string>

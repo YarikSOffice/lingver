@@ -42,9 +42,15 @@ class SettingsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings_activity)
 
-        findViewById<View>(R.id.en).setOnClickListener { setNewLocale(LANGUAGE_ENGLISH, LANGUAGE_ENGLISH_COUNTRY) }
-        findViewById<View>(R.id.ua).setOnClickListener { setNewLocale(LANGUAGE_UKRAINIAN, LANGUAGE_UKRAINIAN_COUNTRY) }
-        findViewById<View>(R.id.ru).setOnClickListener { setNewLocale(LANGUAGE_RUSSIAN, LANGUAGE_RUSSIAN_COUNTRY) }
+        findViewById<View>(R.id.en).setOnClickListener {
+            setNewLocale(LANGUAGE_ENGLISH, LANGUAGE_ENGLISH_COUNTRY)
+        }
+        findViewById<View>(R.id.ua).setOnClickListener {
+            setNewLocale(LANGUAGE_UKRAINIAN, LANGUAGE_UKRAINIAN_COUNTRY)
+        }
+        findViewById<View>(R.id.ru).setOnClickListener {
+            setNewLocale(LANGUAGE_RUSSIAN, LANGUAGE_RUSSIAN_COUNTRY)
+        }
     }
 
     private fun setNewLocale(language: String, country: String) {

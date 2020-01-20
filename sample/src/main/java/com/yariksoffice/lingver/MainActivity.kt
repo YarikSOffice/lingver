@@ -25,6 +25,8 @@
 package com.yariksoffice.lingver
 
 import android.content.Intent
+import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -35,9 +37,14 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var textView: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
+        val helper = WebViewLocaleHelper(this)
+
+        textView = findViewById(R.id.hello)
 
         findViewById<View>(R.id.activity_1).setOnClickListener {
             startActivity(Intent(this, TestActivity1::class.java))
@@ -45,14 +52,27 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.activity_2).setOnClickListener {
             startActivity(Intent(this, TestActivity2::class.java))
         }
+        findViewById<View>(R.id.activity_web_view).setOnClickListener {
+            helper.implementWorkaround()
+            startActivity(Intent(this, WebViewActivity::class.java))
+        }
         findViewById<View>(R.id.settings).setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
+    }
 
-        val tv = findViewById<TextView>(R.id.hello)
+    override fun onStart() {
+        super.onStart()
+
         val date = SimpleDateFormat.getDateInstance().format(Date())
-        tv.text = getString(R.string.hello, date)
-        Log.d(TAG, "Language: " + Lingver.getInstance().getLanguage())
+        textView.text = getString(R.string.hello, date)
+        Log.d(TAG, "Lingver Language: " + Lingver.getInstance().getLanguage())
+        Log.d(TAG, "Actual Language: " + resources.configuration.getLocaleCompat())
+    }
+
+    @Suppress("DEPRECATION")
+    private fun Configuration.getLocaleCompat(): Locale {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) locales.get(0) else locale
     }
 
     companion object {

@@ -53,6 +53,13 @@
         android:text="@string/activity_2_label" />
 
     <Button
+        android:id="@+id/activity_web_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="180dp"
+        android:text="@string/web_view_label" />
+
+    <Button
         android:id="@+id/settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

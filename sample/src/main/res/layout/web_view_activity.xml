@@ -22,20 +22,7 @@
   ~ SOFTWARE.
   -->
 
-<resources>
-    <string name="app_name" translatable="false">Lingver Sample</string>
-
-    <string name="hello">Hello\n%s</string>
-
-    <string name="activity_1_label">Screen 1</string>
-    <string name="activity_2_label">Screen 2</string>
-    <string name="activity_1_text">Arbitrary text 1</string>
-    <string name="activity_2_text">Arbitrary text 2</string>
-
-    <string name="settings_label">Settings</string>
-    <string name="web_view_label">Web View</string>
-
-    <string name="ukrainian">Ukrainian</string>
-    <string name="english">English</string>
-    <string name="russian">Russian</string>
-</resources>
+<WebView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/web_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />

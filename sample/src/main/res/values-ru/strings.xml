@@ -31,6 +31,7 @@
     <string name="activity_2_text">Произвольный текст 2</string>
 
     <string name="settings_label">Настройки</string>
+    <string name="web_view_label">Браузер</string>
 
     <string name="ukrainian">Украинский</string>
     <string name="english">Английский</string>

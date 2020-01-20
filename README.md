@@ -27,6 +27,19 @@ See the sample app for more customization options.
 
 Note that you need to update all already fetched locale-based data manually. Lingver is not responsible for that.
 
+## WebView
+
+Starting from Android N, there is a weird [side effect](https://issuetracker.google.com/issues/37113860) while using a [WebView](https://developer.android.com/reference/android/webkit/WebView)
+in your application. For unknown reasons, the very first creation of it (either programmatically or via inflation)
+resets an application locale to the device default. Obviously, this is not what we expect to happen.
+Moreover, it's not going to be fixed anytime in the future according to the [issuetracker](https://issuetracker.google.com/issues/37113860).
+That's why we should somehow deal with it on our own.
+
+There are plenty of ways how we can fix that, but the idea stays always the same. You have to set back 
+the desired locale after the first usage of a WebView. For instance, you can even programmatically create
+a fake WebView and immediately set a locale back which prevents this side effect from happening in the future.
+See an example of implementation in the sample app.
+
 ## Download
 
 ``` groovy
@@ -35,7 +48,7 @@ repositories {
 }
 
 dependencies {
-	implementation "com.github.YarikSOffice:lingver:1.2.0"
+	implementation "com.github.YarikSOffice:lingver:1.2.1"
 }
 ```
 

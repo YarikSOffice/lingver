@@ -40,6 +40,11 @@ the desired locale after the first usage of a WebView. For instance, you can eve
 a fake WebView and immediately set a locale back which prevents this side effect from happening in the future.
 See an example of implementation in the sample app.
 
+## App Bundles
+
+While using an [app bundle](https://developer.android.com/guide/app-bundle), a user’s device only downloads string resources
+that match the one or more languages currently selected in the device’s settings. Refer to [this page](https://stackoverflow.com/questions/52731670/android-app-bundle-with-in-app-locale-change) if you want to change this behavior and have access to additional language resources.
+
 ## Download
 
 ``` groovy

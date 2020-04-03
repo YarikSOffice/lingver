@@ -27,7 +27,7 @@ apply plugin: 'kotlin-android'
 
 def versionMajor = 1
 def versionMinor = 2
-def versionPatch = 1
+def versionPatch = 2
 
 android {
     compileSdkVersion 29
@@ -35,7 +35,7 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 29
-        versionCode 3
+        versionCode 4
         versionName versionMajor + "." + versionMinor + "." + versionPatch
     }
     // TODO replace with https://issuetracker.google.com/issues/72050365 once released.

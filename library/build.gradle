@@ -42,6 +42,9 @@ android {
     libraryVariants.all {
         it.generateBuildConfig.enabled = false
     }
+    compileOptions {
+        kotlinOptions.freeCompilerArgs += ['-module-name', "com.yariksoffice.lingver.library"]
+    }
 }
 
 dependencies {

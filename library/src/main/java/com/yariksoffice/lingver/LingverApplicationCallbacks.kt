@@ -32,7 +32,7 @@ internal class LingverApplicationCallbacks(private val context: Context,
                                            private val lingver: Lingver) : ComponentCallbacks {
 
     override fun onConfigurationChanged(newConfig: Configuration) {
-        lingver.setLocaleInternal(context)
+        lingver.onConfigurationChanged(context, newConfig)
     }
 
     override fun onLowMemory() {}

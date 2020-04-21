@@ -47,6 +47,8 @@ import java.util.*
  */
 class Lingver private constructor(private val store: LocaleStore) {
 
+    private var deviceLocale: Locale = defaultLocale
+
     /**
      * Creates and sets a [Locale] using language, country and variant information.
      *
@@ -65,8 +67,8 @@ class Lingver private constructor(private val store: LocaleStore) {
      * [Lingver] is not responsible for that.
      */
     fun setLocale(context: Context, locale: Locale) {
-        store.persistLocale(locale)
-        update(context, locale)
+        store.setFollowDeviceLocale(false)
+        persistAndApply(context, locale)
     }
 
     /**
@@ -86,6 +88,13 @@ class Lingver private constructor(private val store: LocaleStore) {
         return verifyLanguage(getLocale().language)
     }
 
+    fun setFollowDeviceLocale(context: Context) {
+        store.setFollowDeviceLocale(true)
+        persistAndApply(context, deviceLocale)
+    }
+
+    fun isFollowingDeviceLocale() = store.isFollowingDeviceLocale()
+
     private fun verifyLanguage(language: String): String {
         // get rid of deprecated language tags
         return when (language) {
@@ -99,10 +108,27 @@ class Lingver private constructor(private val store: LocaleStore) {
     private fun setUp(application: Application) {
         application.registerActivityLifecycleCallbacks(LingverActivityLifecycleCallbacks(this))
         application.registerComponentCallbacks(LingverApplicationCallbacks(application, this))
+        if (store.isFollowingDeviceLocale()) {
+            store.persistLocale(deviceLocale) // might be different on every app launch
+        }
+        persistAndApply(application, store.getLocale())
     }
 
-    internal fun setLocaleInternal(context: Context) {
+    private fun persistAndApply(context: Context, locale: Locale) {
+        store.persistLocale(locale)
+        update(context, locale)
+    }
+
+    internal fun applyLocale(context: Context) {
         update(context, store.getLocale())
+    }
+
+    internal fun onConfigurationChanged(context: Context, config: Configuration) {
+        deviceLocale = config.getLocaleCompat()
+        if (store.isFollowingDeviceLocale()) {
+            store.persistLocale(deviceLocale)
+        }
+        applyLocale(context)
     }
 
     private fun update(context: Context, locale: Locale) {
@@ -166,6 +192,8 @@ class Lingver private constructor(private val store: LocaleStore) {
     }
 
     companion object {
+        @SuppressLint("ConstantLocale")
+        private val defaultLocale: Locale = Locale.getDefault()
 
         private lateinit var instance: Lingver
 
@@ -207,7 +235,6 @@ class Lingver private constructor(private val store: LocaleStore) {
             check(!::instance.isInitialized) { "Already initialized" }
             val lingver = Lingver(store)
             lingver.setUp(application)
-            lingver.setLocale(application, store.getLocale())
             instance = lingver
             return lingver
         }

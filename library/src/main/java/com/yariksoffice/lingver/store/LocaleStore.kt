@@ -33,4 +33,7 @@ import java.util.*
 interface LocaleStore {
     fun getLocale(): Locale
     fun persistLocale(locale: Locale)
+
+    fun setFollowDeviceLocale(value: Boolean)
+    fun isFollowingDeviceLocale(): Boolean
 }

@@ -51,11 +51,22 @@ class SettingsActivity : BaseActivity() {
         findViewById<View>(R.id.ru).setOnClickListener {
             setNewLocale(LANGUAGE_RUSSIAN, LANGUAGE_RUSSIAN_COUNTRY)
         }
+        findViewById<View>(R.id.device_locale).setOnClickListener {
+            followDeviceLocale()
+        }
     }
 
     private fun setNewLocale(language: String, country: String) {
         Lingver.getInstance().setLocale(this, language, country)
+        restart()
+    }
 
+    private fun followDeviceLocale() {
+        Lingver.getInstance().setFollowDeviceLocale(this)
+        restart()
+    }
+
+    private fun restart() {
         val i = Intent(this, MainActivity::class.java)
         startActivity(i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
 

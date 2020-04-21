@@ -31,7 +31,7 @@ import android.os.Bundle
 internal class LingverActivityLifecycleCallbacks(private val lingver: Lingver) : ActivityLifecycleCallbacks {
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-        lingver.setLocaleInternal(activity)
+        lingver.applyLocale(activity)
         lingver.resetActivityTitle(activity)
     }
 

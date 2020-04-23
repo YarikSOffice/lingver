@@ -59,11 +59,11 @@ that match the one or more languages currently selected in the device’s settin
 
 ``` groovy
 repositories {
-	maven { url 'https://jitpack.io' }
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
-	implementation "com.github.YarikSOffice:lingver:1.2.2"
+    implementation "com.github.YarikSOffice:lingver:1.3.0"
 }
 ```
 

@@ -15,17 +15,27 @@ The setup is pretty simple:
 1. Initialize the library in Application.onCreate:
 
 ``` kotlin
-Lingver.init(this, defaultLanguage)
+Lingver.init(context, defaultLanguage)
 ```
 See the sample app for more customization options.
 
 2. Change a locale, for instance, from your setting screen:
 
 ``` kotlin
- Lingver.getInstance().setLocale(this, language)
+ Lingver.getInstance().setLocale(context, language)
 ```
 
 Note that you need to update all already fetched locale-based data manually. Lingver is not responsible for that.
+
+## Follow the device locale
+
+You can configure Lingver to follow the device locale whenever it changes:
+
+ ``` kotlin
+  Lingver.getInstance().setFollowDeviceLocale(context)
+ ```
+
+Note that any call to `setLocale()` stops following the device locale and resets `isFollowingDeviceLocale()` setting. 
 
 ## WebView
 

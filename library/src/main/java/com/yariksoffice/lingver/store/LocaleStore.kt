@@ -28,7 +28,7 @@ import com.yariksoffice.lingver.Lingver
 import java.util.*
 
 /**
- *  Interface to be used by [Lingver] for storing a Locale.
+ *  Interface to be used by [Lingver] for storing a Locale and its complementary data.
  */
 interface LocaleStore {
     fun getLocale(): Locale

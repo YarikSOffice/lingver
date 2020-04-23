@@ -57,10 +57,13 @@ class Lingver private constructor(private val store: LocaleStore,
     }
 
     /**
-     * Sets a [locale] which will be used to localize all data coming from [Resources] class.
+     * Sets a [Locale] which will be used to localize all data coming from [Resources] class.
      *
      * <p>Note that you need to update all already fetched locale-based data manually.
      * [Lingver] is not responsible for that.
+     *
+     * <p>Note that any call to [setLocale] stops following the device locale and resets
+     * [isFollowingDeviceLocale] setting.
      */
     fun setLocale(context: Context, locale: Locale) {
         store.setFollowDeviceLocale(false)
@@ -84,11 +87,17 @@ class Lingver private constructor(private val store: LocaleStore,
         return verifyLanguage(getLocale().language)
     }
 
+    /**
+     * Applies the device locale and starts following it whenever it changes.
+     */
     fun setFollowDeviceLocale(context: Context) {
         store.setFollowDeviceLocale(true)
         persistAndApply(context, deviceLocale)
     }
 
+    /**
+     * Indicates whether the device locale is currently applied.
+     */
     fun isFollowingDeviceLocale() = store.isFollowingDeviceLocale()
 
     private fun verifyLanguage(language: String): String {

@@ -28,11 +28,10 @@ import android.app.Activity
 import android.app.Application.ActivityLifecycleCallbacks
 import android.os.Bundle
 
-internal class LingverActivityLifecycleCallbacks(private val lingver: Lingver) : ActivityLifecycleCallbacks {
+internal class LingverActivityLifecycleCallbacks(private val callback: (Activity) -> Unit) : ActivityLifecycleCallbacks {
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-        lingver.setLocaleInternal(activity)
-        lingver.resetActivityTitle(activity)
+        callback.invoke(activity)
     }
 
     override fun onActivityStarted(activity: Activity) {}

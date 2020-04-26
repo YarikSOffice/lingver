@@ -36,4 +36,5 @@
     <string name="ukrainian">Украинский</string>
     <string name="english">Английский</string>
     <string name="russian">Русский</string>
+    <string name="device_language">Язык устройства</string>
 </resources>

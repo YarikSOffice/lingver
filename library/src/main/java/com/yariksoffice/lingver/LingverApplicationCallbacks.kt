@@ -25,14 +25,12 @@
 package com.yariksoffice.lingver
 
 import android.content.ComponentCallbacks
-import android.content.Context
 import android.content.res.Configuration
 
-internal class LingverApplicationCallbacks(private val context: Context,
-                                           private val lingver: Lingver) : ComponentCallbacks {
+internal class LingverApplicationCallbacks(private val callback: (Configuration) -> Unit) : ComponentCallbacks {
 
     override fun onConfigurationChanged(newConfig: Configuration) {
-        lingver.setLocaleInternal(context)
+        callback.invoke(newConfig)
     }
 
     override fun onLowMemory() {}

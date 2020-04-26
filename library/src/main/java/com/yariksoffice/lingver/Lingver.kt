@@ -28,13 +28,8 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
 import android.content.Context
-import android.content.pm.PackageManager.GET_META_DATA
-import android.content.pm.PackageManager.NameNotFoundException
 import android.content.res.Configuration
 import android.content.res.Resources
-import android.os.Build
-import android.os.Build.VERSION_CODES
-import android.os.LocaleList
 import com.yariksoffice.lingver.store.LocaleStore
 import com.yariksoffice.lingver.store.PreferenceLocaleStore
 import java.util.*
@@ -45,7 +40,10 @@ import java.util.*
  * Once you set a desired locale using [setLocale] method, Lingver will enforce your application
  * to provide correctly localized data via [Resources] class.
  */
-class Lingver private constructor(private val store: LocaleStore) {
+class Lingver private constructor(private val store: LocaleStore,
+                                  private val delegate: UpdateLocaleDelegate) {
+
+    internal var deviceLocale: Locale = defaultLocale
 
     /**
      * Creates and sets a [Locale] using language, country and variant information.
@@ -59,14 +57,17 @@ class Lingver private constructor(private val store: LocaleStore) {
     }
 
     /**
-     * Sets a [locale] which will be used to localize all data coming from [Resources] class.
+     * Sets a [Locale] which will be used to localize all data coming from [Resources] class.
      *
      * <p>Note that you need to update all already fetched locale-based data manually.
      * [Lingver] is not responsible for that.
+     *
+     * <p>Note that any call to [setLocale] stops following the device locale and resets
+     * [isFollowingDeviceLocale] setting.
      */
     fun setLocale(context: Context, locale: Locale) {
-        store.persistLocale(locale)
-        update(context, locale)
+        store.setFollowDeviceLocale(false)
+        persistAndApply(context, locale)
     }
 
     /**
@@ -86,6 +87,19 @@ class Lingver private constructor(private val store: LocaleStore) {
         return verifyLanguage(getLocale().language)
     }
 
+    /**
+     * Applies the device locale and starts following it whenever it changes.
+     */
+    fun setFollowDeviceLocale(context: Context) {
+        store.setFollowDeviceLocale(true)
+        persistAndApply(context, deviceLocale)
+    }
+
+    /**
+     * Indicates whether the device locale is currently applied.
+     */
+    fun isFollowingDeviceLocale() = store.isFollowingDeviceLocale()
+
     private fun verifyLanguage(language: String): String {
         // get rid of deprecated language tags
         return when (language) {
@@ -96,76 +110,47 @@ class Lingver private constructor(private val store: LocaleStore) {
         }
     }
 
-    private fun setUp(application: Application) {
-        application.registerActivityLifecycleCallbacks(LingverActivityLifecycleCallbacks(this))
-        application.registerComponentCallbacks(LingverApplicationCallbacks(application, this))
+    internal fun initialize(application: Application) {
+        application.registerActivityLifecycleCallbacks(LingverActivityLifecycleCallbacks {
+            applyForActivity(it)
+        })
+        application.registerComponentCallbacks(LingverApplicationCallbacks {
+            processConfigurationChange(application, it)
+        })
+        val locale = if (store.isFollowingDeviceLocale()) {
+            deviceLocale // might be different on every app launch
+        } else {
+            store.getLocale()
+        }
+        persistAndApply(application, locale)
     }
 
-    internal fun setLocaleInternal(context: Context) {
-        update(context, store.getLocale())
+    private fun persistAndApply(context: Context, locale: Locale) {
+        store.persistLocale(locale)
+        delegate.applyLocale(context, locale)
     }
 
-    private fun update(context: Context, locale: Locale) {
-        updateResources(context, locale)
-        val appContext = context.applicationContext
-        if (appContext !== context) {
-            updateResources(appContext, locale)
+    private fun applyLocale(context: Context) {
+        delegate.applyLocale(context, store.getLocale())
+    }
+
+    private fun processConfigurationChange(context: Context, config: Configuration) {
+        deviceLocale = config.getLocaleCompat()
+        if (store.isFollowingDeviceLocale()) {
+            persistAndApply(context, deviceLocale)
+        } else {
+            applyLocale(context)
         }
     }
 
-    @Suppress("DEPRECATION")
-    private fun updateResources(context: Context, locale: Locale) {
-        Locale.setDefault(locale)
-
-        val res = context.resources
-        val current = res.configuration.getLocaleCompat()
-
-        if (current == locale) return
-
-        val config = Configuration(res.configuration)
-        when {
-            isAtLeastSdkVersion(VERSION_CODES.N) -> setLocaleForApi24(config, locale)
-            isAtLeastSdkVersion(VERSION_CODES.JELLY_BEAN_MR1) -> config.setLocale(locale)
-            else -> config.locale = locale
-        }
-        res.updateConfiguration(config, res.displayMetrics)
-    }
-
-    @SuppressLint("NewApi")
-    private fun setLocaleForApi24(config: Configuration, locale: Locale) {
-        // bring the target locale to the front of the list
-        val set = linkedSetOf(locale)
-
-        val defaultLocales = LocaleList.getDefault()
-        val all = List<Locale>(defaultLocales.size()) { defaultLocales[it] }
-        // append other locales supported by the user
-        set.addAll(all)
-
-        config.setLocales(LocaleList(*set.toTypedArray()))
-    }
-
-    internal fun resetActivityTitle(activity: Activity) {
-        try {
-            val pm = activity.packageManager
-            val info = pm.getActivityInfo(activity.componentName, GET_META_DATA)
-            if (info.labelRes != 0) {
-                activity.setTitle(info.labelRes)
-            }
-        } catch (e: NameNotFoundException) {
-            e.printStackTrace()
-        }
-    }
-
-    @Suppress("DEPRECATION")
-    private fun Configuration.getLocaleCompat(): Locale {
-        return if (isAtLeastSdkVersion(VERSION_CODES.N)) locales.get(0) else locale
-    }
-
-    private fun isAtLeastSdkVersion(versionCode: Int): Boolean {
-        return Build.VERSION.SDK_INT >= versionCode
+    private fun applyForActivity(activity: Activity) {
+        applyLocale(activity)
+        activity.resetTitle()
     }
 
     companion object {
+        @SuppressLint("ConstantLocale")
+        private val defaultLocale: Locale = Locale.getDefault()
 
         private lateinit var instance: Lingver
 
@@ -205,11 +190,14 @@ class Lingver private constructor(private val store: LocaleStore) {
         @JvmStatic
         fun init(application: Application, store: LocaleStore): Lingver {
             check(!::instance.isInitialized) { "Already initialized" }
-            val lingver = Lingver(store)
-            lingver.setUp(application)
-            lingver.setLocale(application, store.getLocale())
+            val lingver = Lingver(store, UpdateLocaleDelegate())
+            lingver.initialize(application)
             instance = lingver
             return lingver
+        }
+
+        internal fun createInstance(store: LocaleStore, delegate: UpdateLocaleDelegate): Lingver {
+            return Lingver(store, delegate)
         }
     }
 }

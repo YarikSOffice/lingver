@@ -61,8 +61,17 @@ class PreferenceLocaleStore @JvmOverloads constructor(
         prefs.edit().putString(LANGUAGE_KEY, json.toString()).apply()
     }
 
+    override fun setFollowDeviceLocale(value: Boolean) {
+        prefs.edit().putBoolean(FOLLOW_DEVICE_LOCALE_KEY, value).apply()
+    }
+
+    override fun isFollowingDeviceLocale(): Boolean {
+        return prefs.getBoolean(FOLLOW_DEVICE_LOCALE_KEY, false)
+    }
+
     companion object {
         private const val LANGUAGE_KEY = "language_key"
+        private const val FOLLOW_DEVICE_LOCALE_KEY = "follow_device_locale_key"
         private const val DEFAULT_PREFERENCE_NAME = "lingver_preference"
         private const val LANGUAGE_JSON_KEY = "language"
         private const val COUNTRY_JSON_KEY = "country"

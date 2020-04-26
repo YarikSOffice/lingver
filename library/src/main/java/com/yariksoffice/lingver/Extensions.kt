@@ -22,18 +22,31 @@
  * SOFTWARE.
  */
 
-package com.yariksoffice.lingver.store
+package com.yariksoffice.lingver
 
-import com.yariksoffice.lingver.Lingver
+import android.app.Activity
+import android.content.pm.PackageManager
+import android.content.pm.PackageManager.GET_META_DATA
+import android.content.res.Configuration
+import android.os.Build
 import java.util.*
 
-/**
- *  Interface to be used by [Lingver] for storing a Locale and its complementary data.
- */
-interface LocaleStore {
-    fun getLocale(): Locale
-    fun persistLocale(locale: Locale)
+@Suppress("DEPRECATION")
+internal fun Configuration.getLocaleCompat(): Locale {
+    return if (isAtLeastSdkVersion(Build.VERSION_CODES.N)) locales.get(0) else locale
+}
 
-    fun setFollowDeviceLocale(value: Boolean)
-    fun isFollowingDeviceLocale(): Boolean
+internal fun isAtLeastSdkVersion(versionCode: Int): Boolean {
+    return Build.VERSION.SDK_INT >= versionCode
+}
+
+internal fun Activity.resetTitle() {
+    try {
+        val info = packageManager.getActivityInfo(componentName, GET_META_DATA)
+        if (info.labelRes != 0) {
+            setTitle(info.labelRes)
+        }
+    } catch (e: PackageManager.NameNotFoundException) {
+        e.printStackTrace()
+    }
 }

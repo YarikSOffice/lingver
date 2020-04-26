@@ -49,4 +49,11 @@
         android:minWidth="150dp"
         android:text="@string/english" />
 
+    <Button
+        android:id="@+id/device_locale"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="150dp"
+        android:text="@string/device_language" />
+
 </LinearLayout>

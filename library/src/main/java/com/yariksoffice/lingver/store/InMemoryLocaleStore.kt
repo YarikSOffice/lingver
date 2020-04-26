@@ -27,18 +27,27 @@ package com.yariksoffice.lingver.store
 import java.util.*
 
 /**
- * Implementation of [LocaleStore] that keeps the current locale value in memory.
+ * Implementation of [LocaleStore] that keeps data in memory.
  *
  * Useful for cases like instrumentation tests, where you don't want to persist any changes
  * to the application locale.
  */
 class InMemoryLocaleStore() : LocaleStore {
 
-    private var locale: Locale = Locale.getDefault();
+    private var locale: Locale = Locale.getDefault()
+    private var isFollowingDeviceLocale = false
 
     override fun getLocale(): Locale = locale
 
     override fun persistLocale(locale: Locale) {
         this.locale = locale
+    }
+
+    override fun setFollowDeviceLocale(value: Boolean) {
+        isFollowingDeviceLocale = value
+    }
+
+    override fun isFollowingDeviceLocale(): Boolean {
+        return isFollowingDeviceLocale
     }
 }

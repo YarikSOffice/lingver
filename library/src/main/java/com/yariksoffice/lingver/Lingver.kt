@@ -43,7 +43,7 @@ import java.util.*
 class Lingver private constructor(private val store: LocaleStore,
                                   private val delegate: UpdateLocaleDelegate) {
 
-    internal var deviceLocale: Locale = defaultLocale
+    internal var systemLocale: Locale = defaultLocale
 
     /**
      * Creates and sets a [Locale] using language, country and variant information.
@@ -62,11 +62,11 @@ class Lingver private constructor(private val store: LocaleStore,
      * <p>Note that you need to update all already fetched locale-based data manually.
      * [Lingver] is not responsible for that.
      *
-     * <p>Note that any call to [setLocale] stops following the device locale and resets
-     * [isFollowingDeviceLocale] setting.
+     * <p>Note that any call to [setLocale] stops following the system locale and resets
+     * [isFollowingSystemLocale] setting.
      */
     fun setLocale(context: Context, locale: Locale) {
-        store.setFollowDeviceLocale(false)
+        store.setFollowSystemLocale(false)
         persistAndApply(context, locale)
     }
 
@@ -88,17 +88,17 @@ class Lingver private constructor(private val store: LocaleStore,
     }
 
     /**
-     * Applies the device locale and starts following it whenever it changes.
+     * Applies the system locale and starts following it whenever it changes.
      */
-    fun setFollowDeviceLocale(context: Context) {
-        store.setFollowDeviceLocale(true)
-        persistAndApply(context, deviceLocale)
+    fun setFollowSystemLocale(context: Context) {
+        store.setFollowSystemLocale(true)
+        persistAndApply(context, systemLocale)
     }
 
     /**
-     * Indicates whether the device locale is currently applied.
+     * Indicates whether the system locale is currently applied.
      */
-    fun isFollowingDeviceLocale() = store.isFollowingDeviceLocale()
+    fun isFollowingSystemLocale() = store.isFollowingSystemLocale()
 
     private fun verifyLanguage(language: String): String {
         // get rid of deprecated language tags
@@ -117,8 +117,8 @@ class Lingver private constructor(private val store: LocaleStore,
         application.registerComponentCallbacks(LingverApplicationCallbacks {
             processConfigurationChange(application, it)
         })
-        val locale = if (store.isFollowingDeviceLocale()) {
-            deviceLocale // might be different on every app launch
+        val locale = if (store.isFollowingSystemLocale()) {
+            systemLocale // might be different on every app launch
         } else {
             store.getLocale()
         }
@@ -135,9 +135,9 @@ class Lingver private constructor(private val store: LocaleStore,
     }
 
     private fun processConfigurationChange(context: Context, config: Configuration) {
-        deviceLocale = config.getLocaleCompat()
-        if (store.isFollowingDeviceLocale()) {
-            persistAndApply(context, deviceLocale)
+        systemLocale = config.getLocaleCompat()
+        if (store.isFollowingSystemLocale()) {
+            persistAndApply(context, systemLocale)
         } else {
             applyLocale(context)
         }

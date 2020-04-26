@@ -76,10 +76,10 @@ class LingverTest {
     }
 
     @Test
-    fun setLocale_resetFollowingDeviceLocale() {
+    fun setLocale_resetFollowingSystemLocale() {
         lingver.setLocale(context, TEST_LOCALE)
 
-        verify { store.setFollowDeviceLocale(false) }
+        verify { store.setFollowSystemLocale(false) }
     }
 
     @Test
@@ -116,37 +116,37 @@ class LingverTest {
     }
 
     @Test
-    fun setFollowDeviceLocale_persistSetting() {
-        lingver.setFollowDeviceLocale(context)
+    fun setFollowSystemLocale_persistSetting() {
+        lingver.setFollowSystemLocale(context)
 
-        verify { store.setFollowDeviceLocale(true) }
+        verify { store.setFollowSystemLocale(true) }
     }
 
     @Test
-    fun setFollowDeviceLocale_persistDeviceLocale() {
-        lingver.deviceLocale = DEVICE_LOCALE
+    fun setFollowSystemLocale_persistSystemLocale() {
+        lingver.systemLocale = SYSTEM_LOCALE
 
-        lingver.setFollowDeviceLocale(context)
+        lingver.setFollowSystemLocale(context)
 
-        verify { store.persistLocale(DEVICE_LOCALE) }
+        verify { store.persistLocale(SYSTEM_LOCALE) }
     }
 
     @Test
-    fun setFollowDeviceLocale_callDelegateWithDeviceLocale() {
-        lingver.deviceLocale = DEVICE_LOCALE
+    fun setFollowSystemLocale_callDelegateWithSystemLocale() {
+        lingver.systemLocale = SYSTEM_LOCALE
 
-        lingver.setFollowDeviceLocale(context)
+        lingver.setFollowSystemLocale(context)
 
-        verify { delegate.applyLocale(context, DEVICE_LOCALE) }
+        verify { delegate.applyLocale(context, SYSTEM_LOCALE) }
     }
 
     @Test
-    fun isFollowingDeviceLocale_returnCorrectSetting() {
-        followDeviceLocale()
-        assertEquals(lingver.isFollowingDeviceLocale(), true)
+    fun isFollowingSystemLocale_returnCorrectSetting() {
+        followSystemLocale()
+        assertEquals(lingver.isFollowingSystemLocale(), true)
 
-        dontFollowDeviceLocale()
-        assertEquals(lingver.isFollowingDeviceLocale(), false)
+        dontFollowSystemLocale()
+        assertEquals(lingver.isFollowingSystemLocale(), false)
     }
 
     @Test
@@ -158,28 +158,28 @@ class LingverTest {
     }
 
     @Test
-    fun setup_isFollowingDeviceLocale_persistDeviceLocale() {
-        followDeviceLocale()
-        lingver.deviceLocale = DEVICE_LOCALE
+    fun setup_isFollowingSystemLocale_persistSystemLocale() {
+        followSystemLocale()
+        lingver.systemLocale = SYSTEM_LOCALE
 
         lingver.initialize(application)
 
-        verify { store.persistLocale(DEVICE_LOCALE) }
+        verify { store.persistLocale(SYSTEM_LOCALE) }
     }
 
     @Test
-    fun setup_isFollowingDeviceLocale_applyDeviceLocale() {
-        followDeviceLocale()
-        lingver.deviceLocale = DEVICE_LOCALE
+    fun setup_isFollowingSystemLocale_applySystemLocale() {
+        followSystemLocale()
+        lingver.systemLocale = SYSTEM_LOCALE
 
         lingver.initialize(application)
 
-        verify { delegate.applyLocale(application, DEVICE_LOCALE) }
+        verify { delegate.applyLocale(application, SYSTEM_LOCALE) }
     }
 
     @Test
-    fun setup_isNotFollowingDeviceLocale_persistLocale() {
-        dontFollowDeviceLocale()
+    fun setup_isNotFollowingSystemLocale_persistLocale() {
+        dontFollowSystemLocale()
         returnTestLocale()
 
         lingver.initialize(application)
@@ -188,8 +188,8 @@ class LingverTest {
     }
 
     @Test
-    fun setup_isNotFollowingDeviceLocale_applyLocale() {
-        dontFollowDeviceLocale()
+    fun setup_isNotFollowingSystemLocale_applyLocale() {
+        dontFollowSystemLocale()
         returnTestLocale()
 
         lingver.initialize(application)
@@ -198,9 +198,9 @@ class LingverTest {
     }
 
     @Test
-    fun configurationChange_isFollowingDeviceLocale_persistDeviceLocale() {
+    fun configurationChange_isFollowingSystemLocale_persistSystemLocale() {
         prepareComponentCallback()
-        followDeviceLocale()
+        followSystemLocale()
 
         appCallback.captured.onConfigurationChanged(configuration)
 
@@ -208,9 +208,9 @@ class LingverTest {
     }
 
     @Test
-    fun configurationChange_isFollowingDeviceLocale_applyDeviceLocale() {
+    fun configurationChange_isFollowingSystemLocale_applySystemLocale() {
         prepareComponentCallback()
-        followDeviceLocale()
+        followSystemLocale()
 
         appCallback.captured.onConfigurationChanged(configuration)
 
@@ -218,19 +218,19 @@ class LingverTest {
     }
 
     @Test
-    fun configurationChange_isFollowingDeviceLocale_keepDeviceLocaleInMemory() {
-        lingver.deviceLocale = DEVICE_LOCALE
+    fun configurationChange_isFollowingSystemLocale_keepSystemLocaleInMemory() {
+        lingver.systemLocale = SYSTEM_LOCALE
         prepareComponentCallback()
 
         appCallback.captured.onConfigurationChanged(configuration)
 
-        assertEquals(lingver.deviceLocale, CONFIGURATION_CHANGE_LOCALE)
+        assertEquals(lingver.systemLocale, CONFIGURATION_CHANGE_LOCALE)
     }
 
     @Test
-    fun configurationChange_isNotFollowingDeviceLocale_applyCurrentLocale() {
+    fun configurationChange_isNotFollowingSystemLocale_applyCurrentLocale() {
         prepareComponentCallback()
-        dontFollowDeviceLocale()
+        dontFollowSystemLocale()
         returnTestLocale()
 
         appCallback.captured.onConfigurationChanged(configuration)
@@ -239,9 +239,9 @@ class LingverTest {
     }
 
     @Test
-    fun configurationChange_isNotFollowingDeviceLocale_dontPersistAnything() {
+    fun configurationChange_isNotFollowingSystemLocale_dontPersistAnything() {
         prepareComponentCallback()
-        dontFollowDeviceLocale()
+        dontFollowSystemLocale()
 
         appCallback.captured.onConfigurationChanged(configuration)
 
@@ -283,12 +283,12 @@ class LingverTest {
         clearMocks(store)
     }
 
-    private fun followDeviceLocale() {
-        every { store.isFollowingDeviceLocale() } returns true
+    private fun followSystemLocale() {
+        every { store.isFollowingSystemLocale() } returns true
     }
 
-    private fun dontFollowDeviceLocale() {
-        every { store.isFollowingDeviceLocale() } returns false
+    private fun dontFollowSystemLocale() {
+        every { store.isFollowingSystemLocale() } returns false
     }
 
     private fun returnTestLocale() {
@@ -300,7 +300,7 @@ class LingverTest {
         private const val TEST_COUNTRY = "US"
         private const val TEST_VARIANT = "variant"
         private val TEST_LOCALE = Locale.US
-        private val DEVICE_LOCALE = Locale.CANADA
+        private val SYSTEM_LOCALE = Locale.CANADA
         private val CONFIGURATION_CHANGE_LOCALE = Locale.UK
     }
 }

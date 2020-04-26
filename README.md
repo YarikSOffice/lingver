@@ -27,21 +27,21 @@ See the sample app for more customization options.
 
 Note that you need to update all already fetched locale-based data manually. Lingver is not responsible for that.
 
-## Follow the device locale
+## Follow the system locale
 
-You can configure Lingver to follow the device locale whenever it changes:
+You can configure Lingver to follow the system locale whenever it changes:
 
  ``` kotlin
-  Lingver.getInstance().setFollowDeviceLocale(context)
+  Lingver.getInstance().setFollowSystemLocale(context)
  ```
 
-Note that any call to `setLocale()` stops following the device locale and resets `isFollowingDeviceLocale()` setting. 
+Note that any call to `setLocale()` stops following the system locale and resets `isFollowingSystemLocale()` setting. 
 
 ## WebView
 
 Starting from Android N, there is a weird [side effect](https://issuetracker.google.com/issues/37113860) while using a [WebView](https://developer.android.com/reference/android/webkit/WebView)
 in your application. For unknown reasons, the very first creation of it (either programmatically or via inflation)
-resets an application locale to the device default. Obviously, this is not what we expect to happen.
+resets an application locale to the system default. Obviously, this is not what we expect to happen.
 Moreover, it's not going to be fixed anytime in the future according to the [issuetracker](https://issuetracker.google.com/issues/37113860).
 That's why we should somehow deal with it on our own.
 

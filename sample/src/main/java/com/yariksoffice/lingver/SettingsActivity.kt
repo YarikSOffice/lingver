@@ -51,8 +51,8 @@ class SettingsActivity : BaseActivity() {
         findViewById<View>(R.id.ru).setOnClickListener {
             setNewLocale(LANGUAGE_RUSSIAN, LANGUAGE_RUSSIAN_COUNTRY)
         }
-        findViewById<View>(R.id.device_locale).setOnClickListener {
-            followDeviceLocale()
+        findViewById<View>(R.id.system_locale).setOnClickListener {
+            followSystemLocale()
         }
     }
 
@@ -61,8 +61,8 @@ class SettingsActivity : BaseActivity() {
         restart()
     }
 
-    private fun followDeviceLocale() {
-        Lingver.getInstance().setFollowDeviceLocale(this)
+    private fun followSystemLocale() {
+        Lingver.getInstance().setFollowSystemLocale(this)
         restart()
     }
 

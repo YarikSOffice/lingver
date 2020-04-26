@@ -38,5 +38,5 @@
     <string name="ukrainian">Ukrainian</string>
     <string name="english">English</string>
     <string name="russian">Russian</string>
-    <string name="device_language">Device language</string>
+    <string name="system_language">System language</string>
 </resources>

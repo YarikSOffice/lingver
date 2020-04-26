@@ -34,6 +34,6 @@ interface LocaleStore {
     fun getLocale(): Locale
     fun persistLocale(locale: Locale)
 
-    fun setFollowDeviceLocale(value: Boolean)
-    fun isFollowingDeviceLocale(): Boolean
+    fun setFollowSystemLocale(value: Boolean)
+    fun isFollowingSystemLocale(): Boolean
 }

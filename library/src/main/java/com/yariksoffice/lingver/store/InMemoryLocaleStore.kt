@@ -35,7 +35,7 @@ import java.util.*
 class InMemoryLocaleStore() : LocaleStore {
 
     private var locale: Locale = Locale.getDefault()
-    private var isFollowingDeviceLocale = false
+    private var isFollowingSystemLocale = false
 
     override fun getLocale(): Locale = locale
 
@@ -43,11 +43,11 @@ class InMemoryLocaleStore() : LocaleStore {
         this.locale = locale
     }
 
-    override fun setFollowDeviceLocale(value: Boolean) {
-        isFollowingDeviceLocale = value
+    override fun setFollowSystemLocale(value: Boolean) {
+        isFollowingSystemLocale = value
     }
 
-    override fun isFollowingDeviceLocale(): Boolean {
-        return isFollowingDeviceLocale
+    override fun isFollowingSystemLocale(): Boolean {
+        return isFollowingSystemLocale
     }
 }

@@ -30,7 +30,7 @@ import android.content.Context
 import android.content.res.Configuration
 import com.yariksoffice.lingver.store.LocaleStore
 import io.mockk.*
-import org.junit.Assert.assertEquals
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import java.util.*
@@ -143,14 +143,14 @@ class LingverTest {
     @Test
     fun isFollowingSystemLocale_returnCorrectSetting() {
         followSystemLocale()
-        assertEquals(lingver.isFollowingSystemLocale(), true)
+        assertTrue(lingver.isFollowingSystemLocale())
 
         dontFollowSystemLocale()
-        assertEquals(lingver.isFollowingSystemLocale(), false)
+        assertFalse(lingver.isFollowingSystemLocale())
     }
 
     @Test
-    fun setup_registerActivityAndComponentCallbacks() {
+    fun initialize_registerActivityAndComponentCallbacks() {
         lingver.initialize(application)
 
         verify { application.registerActivityLifecycleCallbacks(any()) }
@@ -158,7 +158,7 @@ class LingverTest {
     }
 
     @Test
-    fun setup_isFollowingSystemLocale_persistSystemLocale() {
+    fun initialize_isFollowingSystemLocale_persistSystemLocale() {
         followSystemLocale()
         lingver.systemLocale = SYSTEM_LOCALE
 
@@ -168,7 +168,7 @@ class LingverTest {
     }
 
     @Test
-    fun setup_isFollowingSystemLocale_applySystemLocale() {
+    fun initialize_isFollowingSystemLocale_applySystemLocale() {
         followSystemLocale()
         lingver.systemLocale = SYSTEM_LOCALE
 
@@ -178,7 +178,7 @@ class LingverTest {
     }
 
     @Test
-    fun setup_isNotFollowingSystemLocale_persistLocale() {
+    fun initialize_isNotFollowingSystemLocale_persistLocale() {
         dontFollowSystemLocale()
         returnTestLocale()
 
@@ -188,7 +188,7 @@ class LingverTest {
     }
 
     @Test
-    fun setup_isNotFollowingSystemLocale_applyLocale() {
+    fun initialize_isNotFollowingSystemLocale_applyLocale() {
         dontFollowSystemLocale()
         returnTestLocale()
 

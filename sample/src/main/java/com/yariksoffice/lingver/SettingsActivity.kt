@@ -31,6 +31,8 @@ import android.widget.Toast
 
 import com.yariksoffice.lingver.App.Companion.LANGUAGE_ENGLISH
 import com.yariksoffice.lingver.App.Companion.LANGUAGE_ENGLISH_COUNTRY
+import com.yariksoffice.lingver.App.Companion.LANGUAGE_KHMER
+import com.yariksoffice.lingver.App.Companion.LANGUAGE_KHMER_COUNTRY
 import com.yariksoffice.lingver.App.Companion.LANGUAGE_RUSSIAN
 import com.yariksoffice.lingver.App.Companion.LANGUAGE_RUSSIAN_COUNTRY
 import com.yariksoffice.lingver.App.Companion.LANGUAGE_UKRAINIAN
@@ -50,6 +52,9 @@ class SettingsActivity : BaseActivity() {
         }
         findViewById<View>(R.id.ru).setOnClickListener {
             setNewLocale(LANGUAGE_RUSSIAN, LANGUAGE_RUSSIAN_COUNTRY)
+        }
+        findViewById<View>(R.id.khmer).setOnClickListener {
+            setNewLocale(LANGUAGE_KHMER, LANGUAGE_KHMER_COUNTRY)
         }
         findViewById<View>(R.id.system_locale).setOnClickListener {
             followSystemLocale()

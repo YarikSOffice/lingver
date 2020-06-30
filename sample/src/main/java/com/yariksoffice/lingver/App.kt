@@ -45,5 +45,7 @@ class App : Application() {
         const val LANGUAGE_UKRAINIAN_COUNTRY = "UA"
         const val LANGUAGE_RUSSIAN = "ru"
         const val LANGUAGE_RUSSIAN_COUNTRY = "RU"
+        const val LANGUAGE_KHMER = "km"
+        const val LANGUAGE_KHMER_COUNTRY = "KH"
     }
 }

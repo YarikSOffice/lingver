@@ -1,6 +1,8 @@
 # Lingver
 
 [![](https://jitpack.io/v/YarikSOffice/lingver.svg)](https://jitpack.io/#YarikSOffice/lingver)
+[![](https://github.com/YarikSOffice/lingver/workflows/Build/badge.svg)](https://github.com/YarikSOffice/lingver/actions?query=workflow%3ABuild)
+[![](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
 
 Lingver is a library to manage your application locale and language.
  

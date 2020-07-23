@@ -32,7 +32,7 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import com.yariksoffice.lingver.store.LocaleStore
 import com.yariksoffice.lingver.store.PreferenceLocaleStore
-import java.util.*
+import java.util.Locale
 
 /**
  * Lingver is a tool to manage your application locale and language.
@@ -40,8 +40,10 @@ import java.util.*
  * Once you set a desired locale using [setLocale] method, Lingver will enforce your application
  * to provide correctly localized data via [Resources] class.
  */
-class Lingver private constructor(private val store: LocaleStore,
-                                  private val delegate: UpdateLocaleDelegate) {
+class Lingver private constructor(
+    private val store: LocaleStore,
+    private val delegate: UpdateLocaleDelegate
+) {
 
     internal var systemLocale: Locale = defaultLocale
 
@@ -111,12 +113,16 @@ class Lingver private constructor(private val store: LocaleStore,
     }
 
     internal fun initialize(application: Application) {
-        application.registerActivityLifecycleCallbacks(LingverActivityLifecycleCallbacks {
-            applyForActivity(it)
-        })
-        application.registerComponentCallbacks(LingverApplicationCallbacks {
-            processConfigurationChange(application, it)
-        })
+        application.registerActivityLifecycleCallbacks(
+            LingverActivityLifecycleCallbacks {
+                applyForActivity(it)
+            }
+        )
+        application.registerComponentCallbacks(
+            LingverApplicationCallbacks {
+                processConfigurationChange(application, it)
+            }
+        )
         val locale = if (store.isFollowingSystemLocale()) {
             systemLocale // might be different on every app launch
         } else {

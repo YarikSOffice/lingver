@@ -24,7 +24,7 @@
 
 package com.yariksoffice.lingver.store
 
-import java.util.*
+import java.util.Locale
 
 /**
  * Implementation of [LocaleStore] that keeps data in memory.
@@ -32,7 +32,7 @@ import java.util.*
  * Useful for cases like instrumentation tests, where you don't want to persist any changes
  * to the application locale.
  */
-class InMemoryLocaleStore() : LocaleStore {
+class InMemoryLocaleStore : LocaleStore {
 
     private var locale: Locale = Locale.getDefault()
     private var isFollowingSystemLocale = false

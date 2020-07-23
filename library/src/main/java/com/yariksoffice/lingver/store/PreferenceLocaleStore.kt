@@ -27,15 +27,16 @@ package com.yariksoffice.lingver.store
 import android.content.Context
 import android.content.SharedPreferences
 import org.json.JSONObject
-import java.util.*
+import java.util.Locale
 
 /**
  * Default implementation of [LocaleStore] using [SharedPreferences].
  */
 class PreferenceLocaleStore @JvmOverloads constructor(
-        context: Context,
-        private val defaultLocale: Locale = Locale.getDefault(),
-        preferenceName: String = DEFAULT_PREFERENCE_NAME) : LocaleStore {
+    context: Context,
+    private val defaultLocale: Locale = Locale.getDefault(),
+    preferenceName: String = DEFAULT_PREFERENCE_NAME
+) : LocaleStore {
 
     private val prefs = context.getSharedPreferences(preferenceName, Context.MODE_PRIVATE)
 

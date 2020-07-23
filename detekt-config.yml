@@ -1,0 +1,6 @@
+build:
+  maxIssues: 1
+
+complexity:
+  TooManyFunctions:
+    thresholdInClasses: 13

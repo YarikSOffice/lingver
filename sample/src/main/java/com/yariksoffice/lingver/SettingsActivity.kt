@@ -28,7 +28,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-
 import com.yariksoffice.lingver.App.Companion.LANGUAGE_ENGLISH
 import com.yariksoffice.lingver.App.Companion.LANGUAGE_ENGLISH_COUNTRY
 import com.yariksoffice.lingver.App.Companion.LANGUAGE_RUSSIAN

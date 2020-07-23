@@ -26,7 +26,7 @@ package com.yariksoffice.lingver
 
 import android.app.Application
 import com.yariksoffice.lingver.store.PreferenceLocaleStore
-import java.util.*
+import java.util.Locale
 
 class App : Application() {
 

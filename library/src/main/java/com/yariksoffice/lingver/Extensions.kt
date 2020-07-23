@@ -29,7 +29,7 @@ import android.content.pm.PackageManager
 import android.content.pm.PackageManager.GET_META_DATA
 import android.content.res.Configuration
 import android.os.Build
-import java.util.*
+import java.util.Locale
 
 @Suppress("DEPRECATION")
 internal fun Configuration.getLocaleCompat(): Locale {

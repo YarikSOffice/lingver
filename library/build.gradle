@@ -24,20 +24,10 @@
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-
-def versionMajor = 1
-def versionMinor = 3
-def versionPatch = 0
+apply from: '../common-android.gradle'
+apply from: '../static-analysis.gradle'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
-    defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 29
-        versionCode 4
-        versionName versionMajor + "." + versionMinor + "." + versionPatch
-    }
     // TODO replace with https://issuetracker.google.com/issues/72050365 once released.
     libraryVariants.all {
         it.generateBuildConfig.enabled = false
@@ -49,6 +39,6 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-    testImplementation "junit:junit:4.13"
-    testImplementation "io.mockk:mockk:1.9.3"
+    testImplementation "junit:junit:$junitVersion"
+    testImplementation "io.mockk:mockk:$mockkVersion"
 }

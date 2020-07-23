@@ -25,14 +25,11 @@
 package com.yariksoffice.lingver
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
-import android.content.pm.PackageManager
-import android.content.pm.PackageManager.NameNotFoundException
 import android.content.res.Configuration
 import android.os.Build
 import android.os.LocaleList
-import java.util.*
+import java.util.Locale
 
 internal class UpdateLocaleDelegate {
 
@@ -63,6 +60,7 @@ internal class UpdateLocaleDelegate {
     }
 
     @SuppressLint("NewApi")
+    @Suppress("SpreadOperator")
     private fun setLocaleForApi24(config: Configuration, locale: Locale) {
         // bring the target locale to the front of the list
         val set = linkedSetOf(locale)

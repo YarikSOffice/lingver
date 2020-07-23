@@ -33,5 +33,7 @@ internal class LingverApplicationCallbacks(private val callback: (Configuration)
         callback.invoke(newConfig)
     }
 
-    override fun onLowMemory() {}
+    override fun onLowMemory() {
+        // no-op
+    }
 }
